@@ -4,14 +4,15 @@ from Player import *
 
 class Game:
     def __init__(self):
-        player_sprite = Player((SCREEN_WIDTH / 2, SCREEN_HEIGHT - 10))
+        player_sprite = Player((SCREEN_WIDTH / 2, SCREEN_HEIGHT - 10), SCREEN_WIDTH, 5)
         self.player = pygame.sprite.GroupSingle(player_sprite)
 
     def run(self):
         self.player.update()
-        self.player.draw(screen)
+        self.player.sprite.lasers.draw(screen)
+        self.player.draw(screen)        
 
-if __name__ == '__main__':
+if __name__ == '__main__':  
 
     pygame.init()
 
