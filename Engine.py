@@ -12,6 +12,13 @@ class Game:
         player_sprite = Player((SCREEN_WIDTH / 2, SCREEN_HEIGHT - 10), SCREEN_WIDTH, 5)
         self.player = pygame.sprite.GroupSingle(player_sprite)
 
+        #Health / Score
+        self.lives = 3
+        self.live_surface = pygame.image.load("Sprites\player.png").convert_alpha()
+        self.live_x_start_pos = SCREEN_WIDTH - (self.live_surface.get_size()[0] * 2 + 20)
+        self.score = 0
+        self.font = pygame.font.Font("Font\Pixeled.ttf")
+
         #Obstacle
         self.shape = Obstacle.shape
         self.block_size = 6
@@ -91,11 +98,16 @@ class Game:
                 if pygame.sprite.spritecollide(laser, self.blocks, True):
                     laser.kill()
                 #Alien
-                if pygame.sprite.spritecollide(laser, self.aliens, True):
+                aliens_hit = pygame.sprite.spritecollide(laser, self.aliens, True)
+                if aliens_hit:
+                    for alien in aliens_hit:
+                        self.score += alien.value
                     laser.kill()
                 #Extra
                 if pygame.sprite.spritecollide(laser, self.extra, True):
+                    self.score += 1000
                     laser.kill()
+
         #Alien laser
         if self.alien_lasers:
             for laser in self.alien_lasers:
@@ -105,7 +117,10 @@ class Game:
                 #Player
                 if pygame.sprite.spritecollide(laser, self.player, False):
                     laser.kill()
-                    print("dead !")
+                    self.lives -= 1
+                    if self.lives <= 0:
+                        pygame.quit()
+                        sys.exit()
 
         #Alien
         if self.aliens:
@@ -115,6 +130,15 @@ class Game:
                     pygame.quit()
                     sys.exit()
                 
+    def display_lives(self):
+        for live in range(self.lives - 1):
+            x = self.live_x_start_pos + (live * (self.live_surface.get_size()[0] + 10))
+            screen.blit(self.live_surface, (x, 8))
+
+    def display_score(self):
+        score_surface = self.font.render(f"score: {self.score}", False, "white")
+        score_rect = score_surface.get_rect(topleft = (10, -10))
+        screen.blit(score_surface, score_rect)
 
     def run(self):
         self.player.update()
@@ -124,6 +148,7 @@ class Game:
         self.extra_alien_time()
         self.extra.update()
         self.collision_check()
+        self.display_lives()
 
         self.player.sprite.lasers.draw(screen)
         self.player.draw(screen)        
@@ -132,6 +157,7 @@ class Game:
         self.aliens.draw(screen)
         self.alien_lasers.draw(screen)
         self.extra.draw(screen)
+        self.display_score()
 
 if __name__ == '__main__':
 
