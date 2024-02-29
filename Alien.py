@@ -1,4 +1,5 @@
 import pygame
+from Settings import *
 
 class Alien(pygame.sprite.Sprite):
     def __init__(self, color, x, y):
@@ -7,9 +8,9 @@ class Alien(pygame.sprite.Sprite):
         self.image = pygame.image.load(file_path).convert_alpha()
         self.rect = self.image.get_rect(topleft = (x, y))
     
-        if color == "red": self.value = 100
-        elif color == "green": self.value = 200
-        else: self.value = 500
+        if color == "red": self.value = SCORE_RED
+        elif color == "green": self.value = SCORE_GREEN
+        else: self.value = SCORE_YELLOW
 
     def update(self, direction):
         self.rect.x += direction
@@ -21,10 +22,10 @@ class Extra(pygame.sprite.Sprite):
 
         if side == "right":
             x = screen_width + 50
-            self.speed = -3
+            self.speed = -EXTRA_SPEED
         else:
             x = -50
-            self.speed = 3
+            self.speed = EXTRA_SPEED
 
         self.rect = self.image.get_rect(topleft = (x, 80))
 

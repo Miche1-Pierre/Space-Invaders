@@ -13,17 +13,17 @@ class Game:
         self.player = pygame.sprite.GroupSingle(player_sprite)
 
         #Health / Score
-        self.lives = 3
+        self.lives = LIVES
         self.live_surface = pygame.image.load("Sprites\player.png").convert_alpha()
         self.live_x_start_pos = SCREEN_WIDTH - (self.live_surface.get_size()[0] * 2 + 20)
-        self.score = 0
+        self.score = SCORE
         self.font = pygame.font.Font("Font\Pixeled.ttf")
 
         #Obstacle
         self.shape = Obstacle.shape
-        self.block_size = 6
+        self.block_size = BLOCK_SIZE
         self.blocks = pygame.sprite.Group()
-        self.obstacle_amount = 4
+        self.obstacle_amount = OBSTACLE_AMOUNT
         self.obstacle_x_position = [num * (SCREEN_WIDTH / self.obstacle_amount) for num in range(self.obstacle_amount)]
         self.create_multiple_obstacles(*self.obstacle_x_position, x_start = SCREEN_WIDTH / 14, y_start = 480)
 
@@ -105,7 +105,7 @@ class Game:
                     laser.kill()
                 #Extra
                 if pygame.sprite.spritecollide(laser, self.extra, True):
-                    self.score += 1000
+                    self.score += SCORE_EXTRA
                     laser.kill()
 
         #Alien laser
